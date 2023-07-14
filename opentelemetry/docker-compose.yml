@@ -1,0 +1,21 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      # - 13133:13133 # health_check extension
+      - 4317:4317 # OTLP gRPC receiver
+
+  prometheus:
+    image: prom/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-remote-write-receiver'
+    ports:
+      - 9090:9090
+
+  graphana:
+    image: grafana/grafana-enterprise
+    ports:
+      - 3000:3000

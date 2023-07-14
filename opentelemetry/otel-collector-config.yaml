@@ -1,0 +1,23 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  logging:
+    loglevel: debug
+  prometheusremotewrite:
+    endpoint: 'http://prometheus:9090/api/v1/write'
+    tls:
+      insecure: true
+
+extensions:
+  health_check:
+
+service:
+  extensions: [health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: []
+      exporters: [prometheusremotewrite]
