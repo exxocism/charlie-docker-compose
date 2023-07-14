@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: 'api.honeycomb.io:443'
+    headers:
+      'x-honeycomb-team': 'API_KEY'
+      'x-honeycomb-dataset': 'DATASET_NAME'
+
+processors:
+  batch:
+
+extensions:
+  health_check:
+
+service:
+  extensions: [health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
